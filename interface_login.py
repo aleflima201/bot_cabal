@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import pyodbc
 
 ctk.set_appearance_mode('dark')
 
@@ -6,8 +7,17 @@ ctk.set_appearance_mode('dark')
 def validar_login():
     usuario = entry_usuario.get()
     senha = entry_senha.get()
-    if usuario == "bk201" or senha == "12345":
-        label_valid.configure(text="Loguin realizado com sucesso!", text_color='green')
+
+    #driver - driver
+    #Server - Servidor
+    #Database - Nome do banco de dados
+    conexao = pyodbc.connect("drivers={SQLite3 ODBC Driver}, Server=localhost, Database=Tabela_Usuario.db")
+    cursor = conexao.cursor()
+
+    cursor.execute("SELECT * FROM Clients WHERE Usuario = ? AND Senha = ?", (usuario, senha))
+    conectado = cursor.fetchone()
+    if conectado:
+        app.destroy()
     else:
         label_valid.configure(text="Usuário ou Senha incorreto!", text_color='red')
     
