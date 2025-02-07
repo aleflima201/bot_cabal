@@ -1,17 +1,15 @@
 import customtkinter as ctk
-import pyodbc
+import sqlite3
 
 ctk.set_appearance_mode('dark')
 
 #função de validação de usuario
+
 def validar_login():
     usuario = entry_usuario.get()
     senha = entry_senha.get()
 
-    #driver - driver
-    #Server - Servidor
-    #Database - Nome do banco de dados
-    conexao = pyodbc.connect("drivers={SQLite3 ODBC Driver}, Server=localhost, Database=Tabela_Usuario.db")
+    conexao = sqlite3.connect("Tabela_Usuario.db")
     cursor = conexao.cursor()
 
     cursor.execute("SELECT * FROM Clients WHERE Usuario = ? AND Senha = ?", (usuario, senha))
